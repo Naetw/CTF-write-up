@@ -68,7 +68,7 @@ keep huge -> wipe huge -> keep huge
 
 huge 是 size 40w 的秘密，超過了 128 KB，第一次會由 mmap 來分配記憶體，但是第二次 keep huge 時，就會由 `malloc` 來分配。
 
-根據學長的描述還有日文 write up 的翻譯，應該是因為 memory 被延伸過了，為了讓 memory 確保與其他 chunk 連續，所以會呼叫 `malloc` 而不是 mmap。這真的是  malloc.c 的 secret @@
+問了 **angelboy** 學長，因為 glibc 為了 performance 的問題 在第一次 free 完之後取消了 mmap 的限制 ，改用 brk，所以第二次 malloc huge 的時候他不會檢查 size >= 128 KB，而直接用 malloc。這真的是  malloc.c 的 secret @@
 
 利用特殊的順序來讓 small 跟 huge 指向同一塊記憶體：
 
