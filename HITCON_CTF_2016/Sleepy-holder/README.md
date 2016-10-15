@@ -1,7 +1,7 @@
 #[Hitcon CTF 2016] Sleepy Holder 300
 
 > Category: pwn		
-> point: 100
+> point: 300
 
 這題是看了 **meh** 的 writeup 提示才解出來的，heap 真是太深奧了QQ
 
@@ -33,7 +33,7 @@ if(!buf_in_use){
 ~~~
 keep 會問你要保存什麼樣的秘密，接著檢查是不是已經分配過了，如果沒有則根據 small(40), big(4000), huge(400000)，不同選擇來分配大小，之後可以 read 進該 size 的長度的 payload。但是 huge secret 只能夠 `calloc` 一次，之後就不能再動了。
 
-global buffer 上有三個 address 來存放這些 malloc 得到的記憶體位置，分別稱它為 small_buf, big_buf, huge_buf，除了這些之外，global buffer上還有 3 個 4bytes 的 buffer，來記錄這幾種秘密是不是 inuse。
+global buffer 上有三個 address 來存放這些 malloc 得到的記憶體位置，分別稱它為 `small_buf`, `big_buf`, `huge_buf`，除了這些之外，global buffer上還有 3 個 4bytes 的 buffer，來記錄這幾種秘密是不是 inuse。
 
 wipe
 ----
