@@ -2,8 +2,8 @@
 
 from pwn import *
 
-#r = remote('127.0.0.1', 4000)
-r = remote('pwn2.chal.ctf.westerns.tokyo', 16317)
+r = remote('127.0.0.1', 4000)
+#r = remote('pwn2.chal.ctf.westerns.tokyo', 16317)
 
 raw_input('#')
 

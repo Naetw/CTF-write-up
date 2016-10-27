@@ -2,7 +2,7 @@
 
 from pwn import *
 
-r = remote('127.0.0.1', 8888)
+r = remote('127.0.0.1', 4000)
 #r = remote('pwn.chal.csaw.io', 8003)
 
 libc_start_got = 0x602068
