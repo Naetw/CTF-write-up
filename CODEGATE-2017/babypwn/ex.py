@@ -52,6 +52,8 @@ log.info('sigemptyset : ' + hex(sig) + '\n' +
         'listen : ' + hex(listen) + '\n' +
         'atoi : ' + hex(atoi) + '\n' +
         'fd : ' + hex(fd))
+
+''' Here I use http://libcdb.com '''
 base = atoi - libc.symbols['atoi']
 dup2 = base + libc.symbols['dup2']
 system = 0x08048620
