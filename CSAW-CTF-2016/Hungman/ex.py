@@ -3,13 +3,13 @@
 from pwn import *
 
 #context.log_level = 'DEBUG'
-r = process('./hungman-patch')
-#r = remote('172.17.0.2', 4000)
+#r = process('./hungman-patch')
+r = remote('172.17.0.2', 4000)
 #r = remote('pwn.chal.csaw.io', 8003)
 
-libc = ELF('bc.so.6')
-#libc =ELF('/home/naetw/heapdebug/src/glibc-2.19/32/lib/libc.so.6')
-#libc =ELF('/home/naetw/heapdebug/src/glibc-2.19/64/lib/libc.so.6')
+#libc = ELF('bc.so.6')
+#libc =ELF('/home/naetw/binaryservice/src/glibc-2.19/32/lib/libc.so.6')
+libc =ELF('/home/naetw/binaryservice/src/glibc-2.19/64/lib/libc.so.6')
 
 libc_start_got = 0x602068
 
